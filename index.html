@@ -1,27 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body{
+            text-align: center;
+        }
+    </style>
 </head>
-<body>
-    <h1>La filosifia di Chuck Norris</h1>
-    <p id="sentence"></p>
-    
 
+<body>
+    <h1>La filosofia di Chuck Norris</h1>
+    <h3>Inserisci la categoria</h3>
+    <form method="post" name="modulo">
+        <select id="categorie" onclick="generaCategorie()">
+            <option value="Scegli">Scegli</option>
+        </select>
+    </form><br>
+    <button onclick="generaFrase()">Genera la frase</button>
+    <p id="sentence"></p>
 
     <script>
-        let url = 'https://api.chucknorris.io/jokes/random'
+        function generaCategorie() {
+            let listaCategorieDisponibili = ["animal", "career", "celebrity", "dev", "explicit", "fashion", "food", "history", "money", "movie", "music", "political", "religion", "science", "sport", "travel"]
+            let categoriaSelect = document.getElementById("categorie");
 
-        fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                    console.log(result)
-                    document.getElementById("sentence").innerHTML = result.value
-                }
-            )
+            for (let i = 0; i < listaCategorieDisponibili.length; i++) {
+                const option = document.createElement("option");
+                option.value = listaCategorieDisponibili[i].toLowerCase();
+                option.textContent = listaCategorieDisponibili[i];
+                categoriaSelect.appendChild(option);
+            }
+        }
+
+        function generaFrase() {
+            const categoriaScelta = document.modulo.categorie.options[document.modulo.categorie.selectedIndex].value.trim();
+
+            if (categoriaScelta != "Scegli") {
+                let urlCategoriaSCelta = 'https://api.chucknorris.io/jokes/random?category=' + categoriaScelta // indirizzo categoria specifica
+
+                fetch(urlCategoriaSCelta)
+                    .then(response => response.json())
+                    .then(result => {
+                        console.log(result)
+                        document.getElementById("sentence").innerHTML = result.value
+                    }
+                    )
+
+            }
+            else {
+                alert("Inserire un categoria")
+            }
+        }
     </script>
 </body>
+
 </html>
